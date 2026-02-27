@@ -1,12 +1,16 @@
 ﻿# Debug Helper AstroBox 插件
 
-AstroBox v2 的 Go 插件模板（WIT Component 方案）。
+这是一个用于 AstroBox 连接与交互调试的 Go 插件（WIT Component 方案）。
 
 - 使用 `wit-bindgen` 生成 Go 绑定
 - 使用 `wasm-tools` 生成 component wasm
 - 使用 Python 脚本完成初始化、构建与打包
 
-详细开发说明见 [`docs.md`](docs.md)。
+## 这个插件是干什么的
+
+它提供了一个调试 UI，帮助你快速验证 Interconnect 和 Transport 是否正常。
+帮助开发者快速验证 Interconnect 交互是否达到预期。
+
 
 ## 目录结构
 
