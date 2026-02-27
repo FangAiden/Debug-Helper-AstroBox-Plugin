@@ -1,4 +1,3 @@
-*.wasm
 build/
 .tmp/
 __pycache__/
