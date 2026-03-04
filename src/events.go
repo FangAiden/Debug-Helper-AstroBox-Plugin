@@ -68,7 +68,7 @@ func OnTimer(eventPayload string) string {
 }
 
 func OnUiEvent(eventID string, event ui.Event, eventPayload string) string {
-	if !(eventID == EventInterPayloadInput && (event == ui.EventInput || event == ui.EventChange)) {
+	if !isContinuousInputEvent(eventID, event) {
 		appendLog(LogChannelSystem, LogDirectionIn, "event.ui", fmt.Sprintf("id=%s type=%d payload=%s", eventID, event, truncateForLog(eventPayload, 160)))
 	}
 
@@ -88,8 +88,15 @@ func OnCardRender(cardID string) {
 }
 
 func shouldRerenderAfterUIEvent(eventID string, event ui.Event) bool {
-	if eventID == EventInterPayloadInput && (event == ui.EventInput || event == ui.EventChange) {
+	if isContinuousInputEvent(eventID, event) {
 		return false
 	}
 	return true
+}
+
+func isContinuousInputEvent(eventID string, event ui.Event) bool {
+	if event != ui.EventInput && event != ui.EventChange {
+		return false
+	}
+	return eventID == EventInterPayloadInput || eventID == EventAppLaunchPageInput
 }

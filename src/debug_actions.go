@@ -24,6 +24,8 @@ func DispatchUIAction(eventID string, event ui.Event, eventPayload string) {
 		switch eventID {
 		case EventInterPayloadInput:
 			actionInterPayloadInput(eventPayload)
+		case EventAppLaunchPageInput:
+			actionAppLaunchPageInput(eventPayload)
 		case EventTransportFilterChannelInput:
 			actionTransportFilterChannelInput(eventPayload)
 		case EventTransportFilterTypeInput:
@@ -230,11 +232,12 @@ func actionAppLaunch() {
 		return
 	}
 
-	pageName, confirmed := promptInputDialog("启动快应用", "输入 page-name（每次可编辑）", "pages/index/index")
-	if !confirmed {
-		appendLog(LogChannelSystem, LogDirectionNone, "app.launch.cancel", "user canceled launch")
-		return
-	}
+	pageName := readState(func(state DebugState) string {
+		return normalizeAppLaunchPageName(state.AppLaunchPageName)
+	})
+	withState(func(state *DebugState) {
+		state.AppLaunchPageName = pageName
+	})
 
 	ret := thirdpartyapp.LaunchQa(addr, appInfo, pageName).Read()
 	if ResultUnitFailed(ret) {
@@ -243,6 +246,17 @@ func actionAppLaunch() {
 	}
 
 	appendLog(LogChannelApp, LogDirectionOut, "app.launch", fmt.Sprintf("pkg=%s page=%s", appInfo.PackageName, pageName))
+}
+
+func actionAppLaunchPageInput(eventPayload string) {
+	value, ok := extractUIEventValue(eventPayload)
+	if !ok {
+		return
+	}
+
+	withState(func(state *DebugState) {
+		state.AppLaunchPageName = value
+	})
 }
 
 func actionInterEditPayload() {
@@ -634,6 +648,14 @@ func clearSelectedAppLocked(state *DebugState) {
 	state.SelectedAppName = ""
 	state.SelectedApp = thirdpartyapp.AppInfo{}
 	state.InterconnectRegistered = false
+}
+
+func normalizeAppLaunchPageName(value string) string {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return defaultAppLaunchPageName
+	}
+	return value
 }
 
 func parseUint32Input(value string) (uint32, error) {

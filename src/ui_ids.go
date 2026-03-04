@@ -9,9 +9,10 @@ const (
 	EventDeviceRefresh      = "device::refresh"
 	EventDeviceSelectPrefix = "device::select::"
 
-	EventAppRefresh      = "app::refresh"
-	EventAppSelectPrefix = "app::select::"
-	EventAppLaunch       = "app::launch"
+	EventAppRefresh         = "app::refresh"
+	EventAppSelectPrefix    = "app::select::"
+	EventAppLaunch          = "app::launch"
+	EventAppLaunchPageInput = "app::launch_page_input"
 
 	EventInterEditPayload  = "inter::edit_payload"
 	EventInterPayloadInput = "inter::payload_input"

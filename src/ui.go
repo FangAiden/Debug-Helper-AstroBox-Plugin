@@ -143,6 +143,9 @@ func buildAppTab(snapshot DebugState) *ui.Element {
 		Child(makeText(fmt.Sprintf("已选设备: %s", formatSelectedDevice(snapshot)))).
 		Child(makeText(fmt.Sprintf("目标应用: %s", formatSelectedApp(snapshot))))
 
+	panel = panel.Child(makeText("Launch page-name").MarginTop(8))
+	panel = panel.Child(makeSingleLineInput(snapshot.AppLaunchPageName, EventAppLaunchPageInput))
+
 	panel = panel.Child(
 		makeRow().MarginTop(8).
 			Child(makeSecondaryButton("刷新应用列表", EventAppRefresh).MarginRight(8)).

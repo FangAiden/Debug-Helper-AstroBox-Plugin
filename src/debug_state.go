@@ -7,7 +7,10 @@ import (
 	"time"
 )
 
-const maxLogEntries = 300
+const (
+	maxLogEntries            = 300
+	defaultAppLaunchPageName = "pages/index/index"
+)
 
 type DebugTab string
 
@@ -54,6 +57,7 @@ type DebugState struct {
 	SelectedAppName           string
 	SelectedApp               thirdpartyapp.AppInfo
 	ThirdpartyApps            []thirdpartyapp.AppInfo
+	AppLaunchPageName         string
 	InterconnectPayloadJSON   string
 	InterconnectRegistered    bool
 	InterconnectLastRecvJSON  string
@@ -80,14 +84,15 @@ var (
 func initDebugState() {
 	withState(func(state *DebugState) {
 		*state = DebugState{
-			CurrentTab:               DebugTabDeviceAndApp,
-			InterconnectPayloadJSON:  "{}",
-			TransportFilterChannelID: 0,
+			CurrentTab:                DebugTabDeviceAndApp,
+			AppLaunchPageName:         defaultAppLaunchPageName,
+			InterconnectPayloadJSON:   "{}",
+			TransportFilterChannelID:  0,
 			TransportFilterChannelStr: "0",
-			TransportFilterTypeID:    0,
-			TransportFilterTypeStr:   "0",
-			TransportJSONInput:       "{}",
-			Logs:                     make([]LogEntry, 0, 64),
+			TransportFilterTypeID:     0,
+			TransportFilterTypeStr:    "0",
+			TransportJSONInput:        "{}",
+			Logs:                      make([]LogEntry, 0, 64),
 		}
 	})
 
